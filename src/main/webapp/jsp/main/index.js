@@ -3,13 +3,13 @@ $(function() {
 
 
    $("#button1").click(function(){
-       alert("hello world");
+       alert("request begin");
 
        $.ajax({
            type: "post",
-           url: "index/input.action",
+           url: "user/register.action",
            dataType: "text",
-           data: {id: 6, city: "南京"},
+           data: {suiusrnam: "李瑞锋", suimobile: "15900000000"},
            cache: false,
            async: false,
            success: function(data) {
@@ -20,7 +20,7 @@ $(function() {
            }
        });
 
-       alert("end");
+       alert("request end");
 
    });
 

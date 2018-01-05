@@ -3,7 +3,7 @@ package com.snow.main;
 import com.snow.util.StringUtils;
 
 /**
- * Description: TODO.
+ * Description: common exception.
  * User: kevin
  * Date: 2018/1/1
  * Time: 下午2:50

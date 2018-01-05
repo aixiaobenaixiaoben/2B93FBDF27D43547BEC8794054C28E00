@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snow.mapper.sy.SyusrinfMapper">
+
+  <sql id="Base_Column_List">
+    SUISEQCOD, SUIUSRNAM, SUIPASWRD, SUIMOBILE, SUIVERSON
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultType="com.snow.model.sy.Syusrinf">
+    select 
+    <include refid="Base_Column_List" />
+    from SYUSRINF
+    where SUISEQCOD = #{suiseqcod,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SYUSRINF
+    where SUISEQCOD = #{suiseqcod,jdbcType=VARCHAR} AND SUIVERSON = #{oldverson,jdbcType=TIMESTAMP}
+  </delete>
+
+  <insert id="insert" parameterType="com.snow.model.sy.Syusrinf">
+    insert into SYUSRINF (SUISEQCOD, SUIUSRNAM, SUIPASWRD, 
+      SUIMOBILE, SUIVERSON)
+    values (#{suiseqcod,jdbcType=VARCHAR}, #{suiusrnam,jdbcType=VARCHAR}, #{suipaswrd,jdbcType=VARCHAR}, 
+      #{suimobile,jdbcType=VARCHAR}, #{suiverson,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.snow.model.sy.Syusrinf">
+    insert into SYUSRINF
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="suiseqcod != null">
+        SUISEQCOD,
+      </if>
+      <if test="suiusrnam != null">
+        SUIUSRNAM,
+      </if>
+      <if test="suipaswrd != null">
+        SUIPASWRD,
+      </if>
+      <if test="suimobile != null">
+        SUIMOBILE,
+      </if>
+      <if test="suiverson != null">
+        SUIVERSON,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="suiseqcod != null">
+        #{suiseqcod,jdbcType=VARCHAR},
+      </if>
+      <if test="suiusrnam != null">
+        #{suiusrnam,jdbcType=VARCHAR},
+      </if>
+      <if test="suipaswrd != null">
+        #{suipaswrd,jdbcType=VARCHAR},
+      </if>
+      <if test="suimobile != null">
+        #{suimobile,jdbcType=VARCHAR},
+      </if>
+      <if test="suiverson != null">
+        #{suiverson,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.snow.model.sy.Syusrinf">
+    update SYUSRINF
+    <set>
+      <if test="suiusrnam != null">
+        SUIUSRNAM = #{suiusrnam,jdbcType=VARCHAR},
+      </if>
+      <if test="suipaswrd != null">
+        SUIPASWRD = #{suipaswrd,jdbcType=VARCHAR},
+      </if>
+      <if test="suimobile != null">
+        SUIMOBILE = #{suimobile,jdbcType=VARCHAR},
+      </if>
+      <if test="suiverson != null">
+        SUIVERSON = #{suiverson,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where SUISEQCOD = #{suiseqcod,jdbcType=VARCHAR} AND SUIVERSON = #{oldverson,jdbcType=TIMESTAMP}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.snow.model.sy.Syusrinf">
+    update SYUSRINF
+    set SUIUSRNAM = #{suiusrnam,jdbcType=VARCHAR},
+      SUIPASWRD = #{suipaswrd,jdbcType=VARCHAR},
+      SUIMOBILE = #{suimobile,jdbcType=VARCHAR},
+      SUIVERSON = #{suiverson,jdbcType=TIMESTAMP}
+    where SUISEQCOD = #{suiseqcod,jdbcType=VARCHAR} AND SUIVERSON = #{oldverson,jdbcType=TIMESTAMP}
+  </update>
+
+
+  <select id="getUserCount" resultType="Long">
+    SELECT count(1) FROM SYUSRINF
+  </select>
+
+</mapper>

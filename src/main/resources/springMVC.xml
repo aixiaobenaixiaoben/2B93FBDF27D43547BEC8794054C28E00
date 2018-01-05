@@ -41,7 +41,7 @@
 
 
     <!-- 拦截器 -->
-    <mvc:interceptors>
+    <!--<mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/user/initRegister.action"/>
@@ -50,7 +50,7 @@
             <mvc:exclude-mapping path="/user/login.action"/>
             <bean class="com.snow.main.SecurityInterceptor"/>
         </mvc:interceptor>
-    </mvc:interceptors>
+    </mvc:interceptors>-->
 
 
 </beans>

@@ -1,7 +1,7 @@
 package com.snow.main;
 
-import com.snow.Domain.Item;
-import com.snow.service.UserService;
+import com.snow.model.sy.Syusrinf;
+import com.snow.service.sy.UserService;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -18,12 +18,18 @@ import javax.servlet.http.HttpSession;
  */
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
+    private static final String POST = "POST";
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
-        //TODO
-        Item item = (Item) session.getAttribute(UserService.USER_KEY);
-        if (item == null) {
+        Syusrinf syusrinf = (Syusrinf) session.getAttribute(UserService.USER_KEY);
+
+        /**post requests permitted only */
+        if (syusrinf == null || !POST.equalsIgnoreCase(request.getMethod())) {
+
+            System.out.println("-----------request method:" + request.getMethod());
+
             request.getRequestDispatcher("/jsp/main/401.jsp").forward(request, response);
             return false;
         }

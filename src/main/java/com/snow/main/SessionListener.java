@@ -1,7 +1,7 @@
 package com.snow.main;
 
-import com.snow.Domain.Item;
-import com.snow.service.UserService;
+import com.snow.model.sy.Syusrinf;
+import com.snow.service.sy.UserService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpSession;
@@ -28,9 +28,8 @@ public class SessionListener implements HttpSessionListener {
         if (session != null) {
             LOGGER.info("session销毁:" + session.getId());
 
-            //TODO
-            Item item = (Item) session.getAttribute(UserService.USER_KEY);
-            if (item != null) {
+            Syusrinf syusrinf = (Syusrinf) session.getAttribute(UserService.USER_KEY);
+            if (syusrinf != null) {
                 //session销毁
                 session.invalidate();
             }

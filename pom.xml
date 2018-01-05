@@ -13,7 +13,7 @@
         <mybatis-spring.version>1.3.0</mybatis-spring.version>
         <mybatis.version>3.4.0</mybatis.version>
         <tomcat.version>8.5.24</tomcat.version>
-        <mysql.version>6.0.6</mysql.version>
+        <mysql.version>5.1.45</mysql.version>
         <jackson.version>2.9.0</jackson.version>
         <jstl.version>1.2</jstl.version>
         <log4j.version>1.2.17</log4j.version>
@@ -126,5 +126,15 @@
 
     <build>
         <finalName>snow</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source><!-- 源代码使用的开发版本 -->
+                    <target>1.8</target><!-- 生成的目标class文件的编译版本 -->
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

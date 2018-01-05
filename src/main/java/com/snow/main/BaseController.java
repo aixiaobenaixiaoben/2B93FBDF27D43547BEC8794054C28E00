@@ -13,17 +13,21 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class BaseController {
 
-    private static Logger logger = Logger.getLogger(BaseController.class);
+    protected final Logger logger = Logger.getLogger(BaseController.class);
 
     @ExceptionHandler(Exception.class)
     public String handleException(Exception e, HttpServletRequest request) {
 
-        if (e instanceof ConException) {
+        if (e instanceof DupException) {
+            logger.error("DATABASE EXCEPTION", e);
+            request.setAttribute("MSG", e.getMessage());
+        } else if (e instanceof ConException) {
             logger.error("SYSTEM EXCEPTION", e);
+            request.setAttribute("MSG", e.getMessage());
         } else {
             logger.error("UNKNOWN EXCEPTION", e);
+            request.setAttribute("MSG", "UNKNOWN EXCEPTION");
         }
-        request.setAttribute("MSG", e.getMessage());
         return "main/exception";
     }
 }

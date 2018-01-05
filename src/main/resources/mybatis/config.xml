@@ -7,8 +7,4 @@
         <setting name="logImpl" value="LOG4J"/>
     </settings>
 
-    <typeAliases>
-        <typeAlias type="com.snow.Domain.Item" alias="Item"/>
-    </typeAliases>
-
 </configuration>

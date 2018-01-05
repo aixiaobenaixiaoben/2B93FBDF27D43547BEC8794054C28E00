@@ -1,10 +1,9 @@
-package com.snow.controller;
+package com.snow.controller.sy;
 
-import com.snow.Domain.Item;
 import com.snow.main.BaseController;
 import com.snow.main.ConException;
-import com.snow.service.UserService;
-import org.apache.log4j.Logger;
+import com.snow.model.sy.Syusrinf;
+import com.snow.service.sy.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,24 +22,25 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class UserController extends BaseController {
 
-    private static Logger logger = Logger.getLogger(IndexController.class);
-
     @Resource
     UserService userService;
 
+    @RequestMapping("register")
+    @ResponseBody
+    public void register(Syusrinf syusrinf) {
+        userService.register(syusrinf);
+    }
+
     @RequestMapping("login")
     @ResponseBody
-    public String login(Item item, HttpSession session, HttpServletRequest request) throws ConException {
-        userService.login(item, session);
-        logger.info("登陆用户ID:" + item.getId() + " 名称:" + item.getCity());
+    public String login(Syusrinf syusrinf, HttpSession session, HttpServletRequest request) throws ConException {
+        userService.login(syusrinf, session);
         return request.getContextPath();
     }
 
     @RequestMapping("logout")
     @ResponseBody
     public void logout(HttpSession session) {
-        Item item = (Item) session.getAttribute(UserService.USER_KEY);
-        logger.info("注销用户ID:" + item.getId() + " 名称:" + item.getCity());
         userService.logOut(session);
     }
 
