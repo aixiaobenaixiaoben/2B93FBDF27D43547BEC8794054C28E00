@@ -5,6 +5,5 @@
 <script type="text/javascript" src="/jsp/main/index.js" charset="UTF-8"></script>
 <body>
 <h2>Hello leopard!</h2>
-<button id="button1">button</button>
 </body>
 </html>

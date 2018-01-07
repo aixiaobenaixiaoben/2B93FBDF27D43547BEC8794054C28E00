@@ -6,9 +6,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * Description: TODO.
@@ -18,21 +20,22 @@ import javax.servlet.http.HttpSession;
  */
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
-    private static final String POST = "POST";
+    public static final String POST = "POST";
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        HttpSession session = request.getSession();
-        Syusrinf syusrinf = (Syusrinf) session.getAttribute(UserService.USER_KEY);
-
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws UnauthorizedException, ServletException, IOException {
         /**post requests permitted only */
-        if (syusrinf == null || !POST.equalsIgnoreCase(request.getMethod())) {
-
-            System.out.println("-----------request method:" + request.getMethod());
-
-            request.getRequestDispatcher("/jsp/main/401.jsp").forward(request, response);
+        if (!POST.equalsIgnoreCase(request.getMethod())) {
+            request.getRequestDispatcher("/").forward(request, response);
             return false;
         }
+
+        HttpSession session = request.getSession();
+        Syusrinf syusrinf = (Syusrinf) session.getAttribute(UserService.USER_KEY);
+        if (syusrinf == null) {
+            throw new UnauthorizedException("请先登陆");
+        }
+
         return true;
     }
 

@@ -16,4 +16,6 @@ public interface SyusrinfMapper {
     int updateByPrimaryKey(Syusrinf record);
 
     Long getUserCount();
+
+    Syusrinf queryByMobile(String suimobile);
 }

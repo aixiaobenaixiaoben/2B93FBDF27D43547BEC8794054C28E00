@@ -96,4 +96,9 @@
     SELECT count(1) FROM SYUSRINF
   </select>
 
+  <select id="queryByMobile" parameterType="java.lang.String" resultType="com.snow.model.sy.Syusrinf">
+    SELECT <include refid="Base_Column_List" /> FROM SYUSRINF
+    WHERE trim(SUIMOBILE) = trim(#{suimobile,jdbcType=VARCHAR})
+  </select>
+
 </mapper>
