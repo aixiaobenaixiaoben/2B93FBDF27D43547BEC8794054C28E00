@@ -22,4 +22,9 @@ public class UnauthorizedException extends ConException {
     public UnauthorizedException(Throwable cause) {
         super(cause);
     }
+
+    @Override
+    public String getMessage() {
+        return Response.UNAUTHORIZED_EXCEPTION_CODE + ":" + Response.UNAUTHORIZED_EXCEPTION_MSG;
+    }
 }

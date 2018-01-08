@@ -2,6 +2,7 @@ package com.snow.service.sy;
 
 import com.snow.main.BaseService;
 import com.snow.main.ConException;
+import com.snow.main.DupException;
 import com.snow.mapper.sy.SyusrinfMapper;
 import com.snow.model.sy.Syusrinf;
 import com.snow.util.StringUtils;
@@ -84,5 +85,20 @@ public class UserService extends BaseService {
         }
         user.setSuipaswrd(null);
         return user;
+    }
+
+    public void updateUserInfo(Syusrinf syusrinf) throws ConException {
+        if (StringUtils.isEmpty(syusrinf.getSuiseqcod())) {
+            throw new ConException("用户ID不能为空");
+        }
+        if (StringUtils.isEmpty(syusrinf.getSuiusrnam())) {
+            throw new ConException("用户名不能为空");
+        }
+        syusrinf.setOldverson(syusrinf.getSuiverson());
+        syusrinf.setSuiverson(new Date());
+        int count = syusrinfMapper.updateByPrimaryKeySelective(syusrinf);
+        if (count == 0) {
+            throw new DupException();
+        }
     }
 }

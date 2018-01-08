@@ -1,6 +1,8 @@
 package com.snow.model.sy;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.snow.main.BaseModel;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -18,6 +20,8 @@ public class Syusrinf extends BaseModel {
     private String suimobile;
 
     /** 版本 */
+    @JsonFormat(pattern = TIME_PATTERN, timezone = TIMEZONE)
+    @DateTimeFormat(pattern = TIME_PATTERN)
     private Date suiverson;
 
     public String getSuiseqcod() {

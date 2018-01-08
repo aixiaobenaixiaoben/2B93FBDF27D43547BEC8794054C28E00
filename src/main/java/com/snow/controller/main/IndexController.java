@@ -51,7 +51,7 @@ public class IndexController extends BaseController {
     @RequestMapping("error")
     @ResponseBody
     public void error() throws NotFoundException {
-        throw new NotFoundException("请求路径未找到");
+        throw new NotFoundException();
     }
 
 

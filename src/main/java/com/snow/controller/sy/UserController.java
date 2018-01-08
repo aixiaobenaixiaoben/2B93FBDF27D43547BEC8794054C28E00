@@ -70,5 +70,12 @@ public class UserController extends BaseController {
         return Response.SUCCESS(userService.getUserInfoById(syusrinf));
     }
 
+    @RequestMapping("updateUserInfo")
+    @ResponseBody
+    public Response updateUserInfo(Syusrinf syusrinf) throws ConException {
+        userService.updateUserInfo(syusrinf);
+        return Response.SUCCESS();
+    }
+
 
 }

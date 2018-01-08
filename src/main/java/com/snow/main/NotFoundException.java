@@ -22,4 +22,9 @@ public class NotFoundException extends ConException {
     public NotFoundException(Throwable cause) {
         super(cause);
     }
+
+    @Override
+    public String getMessage() {
+        return Response.NOT_FOUND_EXCEPTION_CODE + ":" + Response.NOT_FOUND_EXCEPTION_MSG;
+    }
 }

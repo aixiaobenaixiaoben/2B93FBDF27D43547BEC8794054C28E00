@@ -33,7 +33,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
         Syusrinf syusrinf = (Syusrinf) session.getAttribute(UserService.USER_KEY);
         if (syusrinf == null) {
-            throw new UnauthorizedException("请先登陆");
+            throw new UnauthorizedException();
         }
 
         return true;
