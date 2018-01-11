@@ -101,4 +101,8 @@
     WHERE trim(SUIMOBILE) = trim(#{suimobile,jdbcType=VARCHAR})
   </select>
 
+  <select id="getUserList" resultType="com.snow.model.sy.Syusrinf">
+    select <include refid="Base_Column_List" /> from SYUSRINF
+  </select>
+
 </mapper>

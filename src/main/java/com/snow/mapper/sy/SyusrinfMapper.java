@@ -2,6 +2,8 @@ package com.snow.mapper.sy;
 
 import com.snow.model.sy.Syusrinf;
 
+import java.util.List;
+
 public interface SyusrinfMapper {
     int deleteByPrimaryKey(Syusrinf record);
 
@@ -18,4 +20,6 @@ public interface SyusrinfMapper {
     Long getUserCount();
 
     Syusrinf queryByMobile(String suimobile);
+
+    List<Syusrinf> getUserList();
 }

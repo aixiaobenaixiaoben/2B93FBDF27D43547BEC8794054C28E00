@@ -77,5 +77,11 @@ public class UserController extends BaseController {
         return Response.SUCCESS();
     }
 
+    @RequestMapping("userList")
+    @ResponseBody
+    public Response userList() {
+        return Response.SUCCESS(userService.getUserList());
+    }
+
 
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Description: TODO.
@@ -100,5 +101,9 @@ public class UserService extends BaseService {
         if (count == 0) {
             throw new DupException();
         }
+    }
+
+    public List<Syusrinf> getUserList() {
+        return syusrinfMapper.getUserList();
     }
 }
