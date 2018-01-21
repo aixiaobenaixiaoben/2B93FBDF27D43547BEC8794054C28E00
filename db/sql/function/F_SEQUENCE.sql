@@ -20,7 +20,7 @@ BEGIN
     	UPDATE SEQUENCE SET ID = ID + 1;
     END IF;
 
-    RETURN CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%I%S'), LPAD(SEQ, 10, '0'));
+    RETURN CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%S'), LPAD(SEQ, 10, '0'));
 
 END;//
 

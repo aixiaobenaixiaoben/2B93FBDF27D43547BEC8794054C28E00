@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snow.mapper.sy.SyvrymblMapper">
+
+  <sql id="Base_Column_List">
+    SVMSEQCOD, SVMMOBILE, SVMVRYCOD, SVMUSEBFR, SVMEXPIRE
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultType="com.snow.model.sy.Syvrymbl">
+    select 
+    <include refid="Base_Column_List" />
+    from SYVRYMBL
+    where SVMSEQCOD = #{svmseqcod,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SYVRYMBL
+    where SVMSEQCOD = #{svmseqcod,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.snow.model.sy.Syvrymbl">
+    insert into SYVRYMBL (SVMSEQCOD, SVMMOBILE, SVMVRYCOD, 
+      SVMUSEBFR, SVMEXPIRE)
+    values (#{svmseqcod,jdbcType=VARCHAR}, #{svmmobile,jdbcType=VARCHAR}, #{svmvrycod,jdbcType=VARCHAR}, 
+      #{svmusebfr,jdbcType=VARCHAR}, #{svmexpire,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.snow.model.sy.Syvrymbl">
+    insert into SYVRYMBL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="svmseqcod != null">
+        SVMSEQCOD,
+      </if>
+      <if test="svmmobile != null">
+        SVMMOBILE,
+      </if>
+      <if test="svmvrycod != null">
+        SVMVRYCOD,
+      </if>
+      <if test="svmusebfr != null">
+        SVMUSEBFR,
+      </if>
+      <if test="svmexpire != null">
+        SVMEXPIRE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="svmseqcod != null">
+        #{svmseqcod,jdbcType=VARCHAR},
+      </if>
+      <if test="svmmobile != null">
+        #{svmmobile,jdbcType=VARCHAR},
+      </if>
+      <if test="svmvrycod != null">
+        #{svmvrycod,jdbcType=VARCHAR},
+      </if>
+      <if test="svmusebfr != null">
+        #{svmusebfr,jdbcType=VARCHAR},
+      </if>
+      <if test="svmexpire != null">
+        #{svmexpire,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.snow.model.sy.Syvrymbl">
+    update SYVRYMBL
+    <set>
+      <if test="svmmobile != null">
+        SVMMOBILE = #{svmmobile,jdbcType=VARCHAR},
+      </if>
+      <if test="svmvrycod != null">
+        SVMVRYCOD = #{svmvrycod,jdbcType=VARCHAR},
+      </if>
+      <if test="svmusebfr != null">
+        SVMUSEBFR = #{svmusebfr,jdbcType=VARCHAR},
+      </if>
+      <if test="svmexpire != null">
+        SVMEXPIRE = #{svmexpire,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where SVMSEQCOD = #{svmseqcod,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.snow.model.sy.Syvrymbl">
+    update SYVRYMBL
+    set SVMMOBILE = #{svmmobile,jdbcType=VARCHAR},
+      SVMVRYCOD = #{svmvrycod,jdbcType=VARCHAR},
+      SVMUSEBFR = #{svmusebfr,jdbcType=VARCHAR},
+      SVMEXPIRE = #{svmexpire,jdbcType=TIMESTAMP}
+    where SVMSEQCOD = #{svmseqcod,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByMobile" parameterType="com.snow.model.sy.Syvrymbl" resultType="com.snow.model.sy.Syvrymbl">
+    select <include refid="Base_Column_List" /> from SYVRYMBL
+    <where>
+      <if test="svmmobile != null">
+        AND SVMMOBILE = #{svmmobile}
+      </if>
+      <if test="svmusebfr != null">
+        AND SVMUSEBFR = #{svmusebfr}
+      </if>
+    </where>
+    ORDER BY SVMSEQCOD DESC LIMIT 1
+  </select>
+
+</mapper>

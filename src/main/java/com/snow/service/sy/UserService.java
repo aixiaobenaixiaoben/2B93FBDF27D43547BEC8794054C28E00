@@ -4,14 +4,19 @@ import com.snow.main.BaseService;
 import com.snow.main.ConException;
 import com.snow.main.DupException;
 import com.snow.mapper.sy.SyusrinfMapper;
+import com.snow.mapper.sy.SyvrymblMapper;
 import com.snow.model.sy.Syusrinf;
+import com.snow.model.sy.Syvrymbl;
 import com.snow.util.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Description: TODO.
@@ -26,7 +31,10 @@ public class UserService extends BaseService {
 
     @Resource
     SyusrinfMapper syusrinfMapper;
+    @Resource
+    SyvrymblMapper syvrymblMapper;
 
+    @Transactional(rollbackFor = Exception.class)
     public void register(Syusrinf syusrinf) throws ConException {
 
         if (StringUtils.isEmpty(syusrinf.getSuiusrnam())) {
@@ -88,6 +96,7 @@ public class UserService extends BaseService {
         return user;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void updateUserInfo(Syusrinf syusrinf) throws ConException {
         if (StringUtils.isEmpty(syusrinf.getSuiseqcod())) {
             throw new ConException("用户ID不能为空");
@@ -103,7 +112,126 @@ public class UserService extends BaseService {
         }
     }
 
+    /**
+     * TODO
+     */
     public List<Syusrinf> getUserList() {
         return syusrinfMapper.getUserList();
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void sendRegisterVerifyCode(Syusrinf syusrinf) throws ConException {
+        if (StringUtils.isEmpty(syusrinf.getSuimobile())) {
+            throw new ConException("手机号不能为空");
+        }
+        Syusrinf existSyusrinf = syusrinfMapper.queryByMobile(syusrinf.getSuimobile());
+        if (existSyusrinf != null) {
+            throw new ConException("该手机号已经注册");
+        }
+        sendVerifyCode(syusrinf);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void sendResetVerifyCode(Syusrinf syusrinf) throws ConException {
+        if (StringUtils.isEmpty(syusrinf.getSuimobile())) {
+            throw new ConException("手机号不能为空");
+        }
+        Syusrinf existSyusrinf = syusrinfMapper.queryByMobile(syusrinf.getSuimobile());
+        if (existSyusrinf == null) {
+            throw new ConException("该手机号未注册");
+        }
+        sendVerifyCode(syusrinf);
+    }
+
+    private void sendVerifyCode(Syusrinf syusrinf) throws ConException {
+        Date current = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(current);
+        calendar.add(Calendar.MINUTE, 10);
+        Date expire = calendar.getTime();
+
+        Syvrymbl syvrymblCond = new Syvrymbl();
+        syvrymblCond.setSvmmobile(syusrinf.getSuimobile());
+        Syvrymbl existSyvrymbl = syvrymblMapper.selectByMobile(syvrymblCond);
+
+        /** 验证码已存在、未校验、未过期，延后过期时间,重新发送 */
+        if (existSyvrymbl != null && "0".equals(existSyvrymbl.getSvmusebfr()) && current.compareTo(existSyvrymbl.getSvmexpire()) < 0) {
+            existSyvrymbl.setSvmexpire(expire);
+            syvrymblMapper.updateByPrimaryKey(existSyvrymbl);
+
+            sendMobileVerifyCode(existSyvrymbl);
+            return;
+        }
+
+        /** 否则发送一个新的验证码 */
+        Syvrymbl newSyvrymbl = new Syvrymbl();
+        newSyvrymbl.setSvmseqcod(commonMapper.sequence());
+        newSyvrymbl.setSvmmobile(syusrinf.getSuimobile());
+        newSyvrymbl.setSvmvrycod(String.format("%06d", new Random().nextInt(1000000)));
+        newSyvrymbl.setSvmusebfr("0");
+        newSyvrymbl.setSvmexpire(expire);
+        syvrymblMapper.insert(newSyvrymbl);
+
+        sendMobileVerifyCode(newSyvrymbl);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Syusrinf verifyCode(Syvrymbl syvrymbl) throws ConException {
+        if (StringUtils.isEmpty(syvrymbl.getSvmmobile())) {
+            throw new ConException("手机号不能为空");
+        }
+        if (StringUtils.isEmpty(syvrymbl.getSvmvrycod())) {
+            throw new ConException("验证码不能为空");
+        }
+        syvrymbl.setSvmusebfr("0");
+        Syvrymbl existSyvrymbl = syvrymblMapper.selectByMobile(syvrymbl);
+        if (existSyvrymbl == null) {
+            throw new ConException("请先发送验证码");
+        }
+        Date current = new Date();
+        if (current.compareTo(existSyvrymbl.getSvmexpire()) > 0) {
+            throw new ConException("验证码已经过期，请重新发送");
+        }
+        if (!syvrymbl.getSvmvrycod().equals(existSyvrymbl.getSvmvrycod())) {
+            throw new ConException("验证码错误");
+        }
+
+        existSyvrymbl.setSvmusebfr("1");
+        syvrymblMapper.updateByPrimaryKeySelective(existSyvrymbl);
+
+        Syusrinf syusrinf = syusrinfMapper.queryByMobile(existSyvrymbl.getSvmmobile());
+        if (syusrinf != null) {
+            syusrinf.setSuipaswrd(null);
+        }
+        return syusrinf;
+    }
+
+    /**
+     * TODO
+     */
+    private void sendMobileVerifyCode(Syvrymbl syvrymbl) {
+        System.out.println("VERIFY MOBILE: " + syvrymbl.getSvmmobile() + " : " + syvrymbl.getSvmvrycod());
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void resetPassword(Syusrinf syusrinf) throws ConException {
+        if (StringUtils.isEmpty(syusrinf.getSuiseqcod())) {
+            throw new ConException("用户ID不能为空");
+        }
+        if (StringUtils.isEmpty(syusrinf.getSuipaswrd())) {
+            throw new ConException("新密码不能为空");
+        }
+        Syusrinf existSyusrinf = syusrinfMapper.selectByPrimaryKey(syusrinf.getSuiseqcod());
+        if (existSyusrinf == null) {
+            throw new ConException("用户不存在");
+        }
+        existSyusrinf.setSuipaswrd(syusrinf.getSuipaswrd());
+        existSyusrinf.setOldverson(syusrinf.getSuiverson());
+        existSyusrinf.setSuiverson(new Date());
+        int count = syusrinfMapper.updateByPrimaryKeySelective(existSyusrinf);
+        if (count == 0) {
+            throw new DupException();
+        }
+    }
+
 }

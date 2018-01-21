@@ -4,6 +4,7 @@ import com.snow.main.BaseController;
 import com.snow.main.ConException;
 import com.snow.main.Response;
 import com.snow.model.sy.Syusrinf;
+import com.snow.model.sy.Syvrymbl;
 import com.snow.service.sy.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,11 +78,77 @@ public class UserController extends BaseController {
         return Response.SUCCESS();
     }
 
+    /**
+     * TODO
+     */
     @RequestMapping("userList")
     @ResponseBody
     public Response userList() {
         return Response.SUCCESS(userService.getUserList());
     }
 
+    @RequestMapping("sendRegisterVerifyCode")
+    @ResponseBody
+    public Response sendRegisterVerifyCode(Syusrinf syusrinf,
+                                           HttpServletRequest request,
+                                           HttpServletResponse response) throws ConException, ServletException, IOException {
+        /**post requests permitted only */
+        if (!checkValidRequestMethod(request, response)) {
+            return null;
+        }
+        userService.sendRegisterVerifyCode(syusrinf);
+        return Response.SUCCESS();
+    }
+
+    @RequestMapping("sendResetVerifyCode")
+    @ResponseBody
+    public Response sendResetVerifyCode(Syusrinf syusrinf,
+                                        HttpServletRequest request,
+                                        HttpServletResponse response) throws ConException, ServletException, IOException {
+        /**post requests permitted only */
+        if (!checkValidRequestMethod(request, response)) {
+            return null;
+        }
+        userService.sendResetVerifyCode(syusrinf);
+        return Response.SUCCESS();
+    }
+
+    @RequestMapping("registerVerifyCode")
+    @ResponseBody
+    public Response registerVerifyCode(Syvrymbl syvrymbl,
+                                       HttpServletRequest request,
+                                       HttpServletResponse response) throws ConException, ServletException, IOException {
+        /**post requests permitted only */
+        if (!checkValidRequestMethod(request, response)) {
+            return null;
+        }
+        userService.verifyCode(syvrymbl);
+        return Response.SUCCESS();
+    }
+
+    @RequestMapping("resetVerifyCode")
+    @ResponseBody
+    public Response resetVerifyCode(Syvrymbl syvrymbl,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) throws ConException, ServletException, IOException {
+        /**post requests permitted only */
+        if (!checkValidRequestMethod(request, response)) {
+            return null;
+        }
+        return Response.SUCCESS(userService.verifyCode(syvrymbl));
+    }
+
+    @RequestMapping("resetPassword")
+    @ResponseBody
+    public Response resetPassword(Syusrinf syusrinf,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response) throws ConException, ServletException, IOException {
+        /**post requests permitted only */
+        if (!checkValidRequestMethod(request, response)) {
+            return null;
+        }
+        userService.resetPassword(syusrinf);
+        return Response.SUCCESS();
+    }
 
 }
