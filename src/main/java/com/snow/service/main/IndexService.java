@@ -20,7 +20,7 @@ public class IndexService {
 
     @Transactional(rollbackFor = Exception.class)
     public String index() {
-        return "hello world" + syusrinfMapper.getUserCount();
+        return "User Count: " + syusrinfMapper.getUserCount();
     }
 
 }
