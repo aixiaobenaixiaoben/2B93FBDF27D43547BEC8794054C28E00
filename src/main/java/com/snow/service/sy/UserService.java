@@ -218,8 +218,6 @@ public class UserService extends BaseService {
      * TODO
      */
     private void sendMobileVerifyCode(Syvrymbl syvrymbl) throws ConException {
-        System.out.println("VERIFY MOBILE: " + syvrymbl.getSvmmobile() + " : " + syvrymbl.getSvmvrycod());
-
         try {
             //设置超时时间-可自行调整
             System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -260,6 +258,7 @@ public class UserService extends BaseService {
             SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
             if(sendSmsResponse.getCode() == null || !sendSmsResponse.getCode().equals("OK")) {
                 logger.error("SMS ERROR: CODE:" + sendSmsResponse.getCode() + "-MESSAGE:" + sendSmsResponse.getMessage());
+                logger.error("VERIFY MOBILE: " + syvrymbl.getSvmmobile() + " : " + syvrymbl.getSvmvrycod());
                 throw new ConException("SEND CONFIRMATION CODE ERROR");
             }
 
